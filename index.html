@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Placement Test Grammar - Salvo Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --chrome: #e5e7eb;
+            --chrome-light: #f9fafb;
+            --chrome-dark: #9ca3af;
+            --gold: #fbbf24;
+            --gold-light: #fcd34d;
+            --gold-dark: #d97706;
+            --glass: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(59, 130, 246, 0.2);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
+            color: #1e293b;
+            overflow-x: hidden;
+            max-width: 480px; 
+            margin: 0 auto;
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.1), transparent 25%);
+            filter: blur(40px);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.1);
+        }
+
+        .chrome-btn {
+            background: linear-gradient(145deg, #f9fafb, #e5e7eb);
+            border: 2px solid #d1d5db;
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            color: #374151;
+        }
+
+        .chrome-btn:hover {
+            background: linear-gradient(145deg, #ffffff, #f3f4f6);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .gold-btn {
+            background: linear-gradient(145deg, #fbbf24, #f59e0b);
+            border: 2px solid #d97706;
+            box-shadow: 
+                0 4px 6px -1px rgba(217, 119, 6, 0.3),
+                0 2px 4px -1px rgba(217, 119, 6, 0.2),
+                inset 0 1px 0 rgba(252, 211, 77, 0.5);
+            color: #78350f;
+            font-weight: 700;
+        }
+
+        .gold-btn:hover {
+            background: linear-gradient(145deg, #fcd34d, #fbbf24);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 15px -3px rgba(217, 119, 6, 0.4),
+                0 4px 6px -2px rgba(217, 119, 6, 0.2),
+                inset 0 1px 0 rgba(252, 211, 77, 0.6);
+        }
+
+        .neon-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            color: #1e293b;
+            transition: all 0.3s;
+        }
+        .custom-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+
+        /* Password Lock Screen */
+        .lock-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 50%, #f3e8ff 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lock-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 
+                0 0 40px rgba(59, 130, 246, 0.4),
+                inset 0 2px 4px rgba(255,255,255,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .password-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px 20px;
+            font-size: 18px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e293b;
+            border-radius: 12px;
+            text-align: center;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+
+        .password-error {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .password-error.show {
+            opacity: 1;
+        }
+
+        .level-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .level-a1 { border-left: 4px solid #22c55e; }
+        .level-a2 { border-left: 4px solid #3b82f6; }
+        .level-b1 { border-left: 4px solid #f59e0b; }
+        .level-b2 { border-left: 4px solid #ef4444; }
+        .level-c1 { border-left: 4px solid #8b5cf6; }
+        .level-c2 { border-left: 4px solid #ec4899; }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            text-align: left;
+            color: #374151;
+        }
+
+        .option-card:hover:not(.disabled) {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateX(5px);
+        }
+
+        .option-card.selected-correct {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .option-card.selected-wrong {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { 
+                transform: translateY(-100px) rotate(0deg) scale(1); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(100vh) rotate(720deg) scale(0.5); 
+                opacity: 0; 
+            }
+        }
+
+        .confetti-burst {
+            animation: burst 0.6s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        .hidden { display: none !important; }
+
+        /* Chrome text effect */
+        .chrome-text {
+            background: linear-gradient(to bottom, #f9fafb 0%, #d1d5db 50%, #9ca3af 51%, #e5e7eb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Gold text effect */
+        .gold-text {
+            background: linear-gradient(to bottom, #fcd34d 0%, #fbbf24 50%, #d97706 51%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- PASSWORD LOCK SCREEN -->
+    <div id="lockScreen" class="lock-screen">
+        <div class="lock-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+        </div>
+        <h1 class="text-3xl font-bold mb-2 font-['Space_Grotesk'] neon-text">Placement Test Pro</h1>
+        <p class="text-gray-600 mb-6 text-center text-sm">Masukkan kode akses untuk melanjutkan<br>Salvo Group Edition</p>
+        
+        <input type="password" id="passwordInput" class="password-input" placeholder="••••••••••••••" maxlength="20">
+        <p id="passwordError" class="password-error">Kode salah! Coba lagi.</p>
+        
+        <button onclick="checkPassword()" class="mt-6 gold-btn px-8 py-3 rounded-xl font-bold text-lg w-full max-w-[300px]">
+            Buka Akses
+        </button>
+        
+        <p class="mt-8 text-xs text-gray-500">Powered by Salvo Group</p>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="bg-mesh"></div>
+
+    <!-- Main App (Hidden until unlocked) -->
+    <div id="mainApp" class="hidden">
+        <!-- Top Navigation -->
+        <nav class="fixed top-0 w-full max-w-[480px] z-50 glass-panel border-b border-blue-200/50">
+            <div class="flex justify-between items-center px-4 py-3">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="showSection('home')">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        </svg>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight font-['Space_Grotesk'] text-gray-800">Grammar<span class="text-blue-600">Test</span></span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="lockApp()" class="text-gray-500 hover:text-blue-600 transition p-2 rounded-full hover:bg-blue-50" title="Lock App">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="pt-16 pb-20 px-4 min-h-screen relative">
+
+            <!-- SECTION: HOME / LEVEL SELECT -->
+            <section id="home" class="section-content fade-in">
+                <div class="mt-6 mb-6 text-center">
+                    <h1 class="text-3xl font-bold mb-2 font-['Space_Grotesk'] neon-text">Pilih Level</h1>
+                    <p class="text-gray-600 text-sm">Placement Test Grammar - Salvo Group</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="glass-panel rounded-2xl p-4 mb-6 flex justify-between items-center border border-blue-200/50">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600" id="total-progress">0%</div>
+                        <div class="text-xs text-gray-500 uppercase">Total Progress</div>
+                    </div>
+                    <div class="h-8 w-px bg-blue-200"></div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600" id="completed-soal">0</div>
+                        <div class="text-xs text-gray-500 uppercase">Soal Dikerjakan</div>
+                    </div>
+                    <div class="h-8 w-px bg-blue-200"></div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-amber-500">100</div>
+                        <div class="text-xs text-gray-500 uppercase">Total Soal</div>
+                    </div>
+                </div>
+
+                <!-- Level Selection Grid -->
+                <div class="space-y-4 mb-6">
+                    <!-- A1 -->
+                    <div onclick="startLevel('A1')" class="level-card level-a1 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-green-600">Level A1</h3>
+                            <p class="text-xs text-gray-600 mt-1">Beginner • 20 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Basic Grammar, Present Tense, Articles</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-600" id="progress-a1">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- A2 -->
+                    <div onclick="startLevel('A2')" class="level-card level-a2 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-blue-600">Level A2</h3>
+                            <p class="text-xs text-gray-600 mt-1">Elementary • 15 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Past Tense, Future, Comparatives</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-blue-600" id="progress-a2">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- B1 -->
+                    <div onclick="startLevel('B1')" class="level-card level-b1 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-amber-600">Level B1</h3>
+                            <p class="text-xs text-gray-600 mt-1">Intermediate • 20 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Perfect Tenses, Conditionals, Passive</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-amber-600" id="progress-b1">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- B2 -->
+                    <div onclick="startLevel('B2')" class="level-card level-b2 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-red-600">Level B2</h3>
+                            <p class="text-xs text-gray-600 mt-1">Upper Intermediate • 20 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Advanced Grammar, Inversion, Modals</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-red-600" id="progress-b2">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- C1 -->
+                    <div onclick="startLevel('C1')" class="level-card level-c1 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-purple-600">Level C1</h3>
+                            <p class="text-xs text-gray-600 mt-1">Advanced • 15 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Complex Structures, Subjunctive</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-purple-600" id="progress-c1">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- C2 -->
+                    <div onclick="startLevel('C2')" class="level-card level-c2 flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-pink-600">Level C2</h3>
+                            <p class="text-xs text-gray-600 mt-1">Mastery • 10 Soal</p>
+                            <p class="text-xs text-gray-500 mt-1">Mastery Level, Idioms, Inversion</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-pink-600" id="progress-c2">0%</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mt-1 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Test Option -->
+                <button onclick="startFullTest()" class="w-full gold-btn p-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Kerjakan Semua Level (100 Soal)
+                </button>
+            </section>
+
+            <!-- SECTION: QUIZ -->
+            <section id="quiz" class="section-content hidden">
+                <!-- Header -->
+                <div class="glass-panel rounded-2xl p-4 mb-4 flex items-center justify-between border border-blue-200/50">
+                    <div class="flex items-center gap-3">
+                        <div class="relative w-12 h-12">
+                            <svg class="progress-ring w-12 h-12">
+                                <circle cx="24" cy="24" r="20" fill="none" stroke="#e0e7ff" stroke-width="3"/>
+                                <circle id="progressCircle" cx="24" cy="24" r="20" fill="none" stroke="url(#gradient)" stroke-width="3" 
+                                        stroke-dasharray="125.6" stroke-dashoffset="125.6" stroke-linecap="round" class="progress-ring"/>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center font-bold text-xs text-gray-700" id="questionNumber">1</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-500">Level</div>
+                            <div id="currentLevelBadge" class="text-xs font-bold px-2 py-1 rounded bg-blue-100 text-blue-600 inline-block">A1</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-gray-500">Progress</div>
+                        <div class="text-lg font-bold text-gray-800"><span id="currentQ">1</span>/<span id="totalQ">20</span></div>
+                    </div>
+                </div>
+
+                <!-- Question Card -->
+                <div class="glass-panel rounded-2xl p-6 mb-4 min-h-[300px] border border-blue-200/50">
+                    <div id="questionContainer" class="fade-in">
+                        <div class="mb-6">
+                            <p id="questionText" class="text-lg font-medium leading-relaxed mb-2 text-gray-800"></p>
+                            <p id="questionContext" class="text-sm text-blue-600 italic font-medium"></p>
+                        </div>
+                        
+                        <div id="optionsContainer" class="space-y-3">
+                            <!-- Options injected here -->
+                        </div>
+
+                        <!-- Explanation (show after answer) -->
+                        <div id="explanationBox" class="hidden mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                            <p class="text-sm text-blue-700 font-bold mb-1 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Penjelasan:
+                            </p>
+                            <p id="explanationText" class="text-sm text-gray-700"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between items-center gap-2">
+                    <button id="prevBtn" onclick="previousQuestion()" class="px-4 py-3 rounded-xl chrome-btn text-sm disabled:opacity-50">
+                        ← Prev
+                    </button>
+                    
+                    <button onclick="flagQuestion()" id="flagBtn" class="px-4 py-3 rounded-xl chrome-btn text-sm text-amber-600 border-amber-300" title="Tandai">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-8a2 2 0 012-2h14a2 2 0 012 2v8M3 21h18M5 21v-8a2 2 0 012-2h14a2 2 0 012 2v8" />
+                        </svg>
+                    </button>
+
+                    <button id="nextBtn" onclick="nextQuestion()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-bold transition shadow-lg hover:shadow-xl">
+                        Next →
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION: RESULTS -->
+            <section id="results" class="section-content hidden">
+                <div class="glass-panel rounded-2xl p-6 text-center fade-in border border-blue-200/50">
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-600 flex items-center justify-center text-3xl shadow-xl border-4 border-yellow-200">
+                        🏆
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 text-gray-800">Level Selesai!</h2>
+                    <p class="text-gray-600 text-sm mb-6">Berikut hasil placement test Anda</p>
+
+                    <div class="glass-panel rounded-xl p-6 mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+                        <div class="text-sm text-blue-600 font-semibold mb-2">LEVEL ANDA</div>
+                        <div id="resultLevel" class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">A1</div>
+                        <div id="resultDesc" class="text-gray-600 text-sm">Beginner</div>
+                        <div class="mt-4 text-2xl font-bold text-gray-800">
+                            Score: <span id="resultScore" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">0</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mb-6 text-sm">
+                        <div class="glass-panel p-3 rounded-xl border border-green-200">
+                            <div class="text-green-600 font-bold text-lg" id="correctCount">0</div>
+                            <div class="text-gray-500 text-xs">Benar</div>
+                        </div>
+                        <div class="glass-panel p-3 rounded-xl border border-red-200">
+                            <div class="text-red-600 font-bold text-lg" id="wrongCount">0</div>
+                            <div class="text-gray-500 text-xs">Salah</div>
+                        </div>
+                        <div class="glass-panel p-3 rounded-xl border border-blue-200">
+                            <div class="text-blue-600 font-bold text-lg" id="accuracyPercent">0%</div>
+                            <div class="text-gray-500 text-xs">Akurasi</div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <button onclick="downloadCertificate()" class="gold-btn p-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Download Sertifikat
+                        </button>
+                        <button onclick="backToHome()" class="chrome-btn p-3 rounded-xl text-gray-600 hover:text-gray-800">
+                            Kembali ke Menu
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // --- PASSWORD PROTECTION ---
+        const CORRECT_PASSWORD = "salvogroupclass";
+        let isUnlocked = false;
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('passwordError');
+            
+            if (input === CORRECT_PASSWORD) {
+                isUnlocked = true;
+                document.getElementById('lockScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lockScreen').classList.add('hidden');
+                    document.getElementById('mainApp').classList.remove('hidden');
+                    document.getElementById('mainApp').classList.add('fade-in');
+                }, 300);
+                localStorage.setItem('placement_unlocked', 'true');
+                loadProgress();
+            } else {
+                error.classList.add('show');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').style.borderColor = '#ef4444';
+                setTimeout(() => {
+                    document.getElementById('passwordInput').style.borderColor = '';
+                }, 1000);
+            }
+        }
+
+        function lockApp() {
+            isUnlocked = false;
+            localStorage.removeItem('placement_unlocked');
+            location.reload();
+        }
+
+        window.onload = () => {
+            if (localStorage.getItem('placement_unlocked') === 'true') {
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+                isUnlocked = true;
+                loadProgress();
+            }
+        };
+
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // --- QUESTION BANK (REVISED - NO CONFUSING QUESTIONS) ---
+        const questionBank = {
+            A1: [
+                { level: "A1", points: 1, question: "She _____ to school every day.", context: "Simple Present - Routine", options: ["go", "goes", "going", "gone"], correct: 1, explanation: "Subject 'She' (3rd person singular) requires verb + s/es." },
+                { level: "A1", points: 1, question: "I _____ a student.", context: "Verb To Be", options: ["am", "is", "are", "be"], correct: 0, explanation: "I + am, He/She/It + is, You/We/They + are." },
+                { level: "A1", points: 1, question: "They _____ watching TV now.", context: "Present Continuous", options: ["is", "are", "am", "be"], correct: 1, explanation: "They (plural) uses 'are' + verb-ing." },
+                { level: "A1", points: 1, question: "_____ you like coffee?", context: "Present Simple Question", options: ["Do", "Does", "Are", "Is"], correct: 0, explanation: "Do/Does untuk Present Simple. 'You' uses 'Do'." },
+                { level: "A1", points: 1, question: "He _____ to the party yesterday.", context: "Simple Past", options: ["go", "goes", "went", "gone"], correct: 2, explanation: "Go adalah irregular verb: go-went-gone." },
+                { level: "A1", points: 1, question: "There _____ a book on the table.", context: "There is/are", options: ["is", "are", "am", "be"], correct: 0, explanation: "'A book' singular menggunakan 'is'." },
+                { level: "A1", points: 1, question: "She has _____ apple.", context: "Articles a/an", options: ["a", "an", "the", "-"], correct: 1, explanation: "Gunakan 'an' sebelum vowel sounds." },
+                { level: "A1", points: 1, question: "_____ is your name?", context: "Wh- Questions", options: ["What", "Who", "Where", "When"], correct: 0, explanation: "'What' untuk menanyakan nama/informasi." },
+                { level: "A1", points: 1, question: "I don't have _____ money.", context: "Negative with any", options: ["some", "any", "a", "many"], correct: 1, explanation: "Gunakan 'any' dalam kalimat negatif." },
+                { level: "A1", points: 1, question: "The book is _____ the table.", context: "Prepositions", options: ["in", "on", "at", "to"], correct: 1, explanation: "'On' untuk benda di atas permukaan." },
+                { level: "A1", points: 1, question: "She _____ tall and beautiful.", context: "Verb To Be", options: ["am", "is", "are", "be"], correct: 1, explanation: "She + is." },
+                { level: "A1", points: 1, question: "We _____ in Jakarta.", context: "Verb To Be - Location", options: ["am", "is", "are", "be"], correct: 2, explanation: "We + are." },
+                { level: "A1", points: 1, question: "I _____ play tennis on Sundays.", context: "Adverbs of Frequency", options: ["sometimes", "is", "are", "be"], correct: 0, explanation: "Adverbs of frequency untuk rutinitas." },
+                { level: "A1", points: 1, question: "_____ you hungry?", context: "Verb To Be Question", options: ["Do", "Are", "Is", "Does"], correct: 1, explanation: "Are you...? untuk menanyakan keadaan." },
+                { level: "A1", points: 1, question: "They _____ not at home.", context: "Verb To Be Negative", options: ["am", "is", "are", "do"], correct: 2, explanation: "They + are + not." },
+                { level: "A1", points: 1, question: "I _____ like spicy food.", context: "Present Simple Negative", options: ["am not", "don't", "doesn't", "isn't"], correct: 1, explanation: "Do not (don't) untuk I/You/We/They." },
+                { level: "A1", points: 1, question: "_____ he live here?", context: "Present Simple Question", options: ["Do", "Does", "Is", "Are"], correct: 1, explanation: "Does untuk he/she/it." },
+                { level: "A1", points: 1, question: "This is _____ pen.", context: "Possessive Adjectives", options: ["my", "me", "I", "mine"], correct: 0, explanation: "My (possessive adjective) + noun." },
+                { level: "A1", points: 1, question: "The pens are _____ the bag.", context: "Prepositions", options: ["on", "in", "at", "under"], correct: 1, explanation: "'In' untuk benda di dalam." },
+                { level: "A1", points: 1, question: "How _____ are you? I'm 20.", context: "Question Words", options: ["old", "many", "much", "long"], correct: 0, explanation: "How old untuk usia." }
+            ],
+            A2: [
+                { level: "A2", points: 2, question: "I _____ to the cinema last night.", context: "Past Simple", options: ["go", "went", "gone", "going"], correct: 1, explanation: "Go-went-gone: irregular verb." },
+                { level: "A2", points: 2, question: "She _____ TV when I called.", context: "Past Continuous", options: ["watches", "watched", "was watching", "is watching"], correct: 2, explanation: "Past Continuous: was/were + verb-ing." },
+                { level: "A2", points: 2, question: "I have _____ this book before.", context: "Present Perfect", options: ["read", "reads", "reading", "red"], correct: 0, explanation: "Present Perfect: have/has + V3." },
+                { level: "A2", points: 2, question: "We _____ to Paris next week.", context: "Going to Future", options: ["will go", "go", "are going", "went"], correct: 2, explanation: "Be going to untuk rencana." },
+                { level: "A2", points: 2, question: "This is the _____ book I've ever read.", context: "Superlatives", options: ["good", "better", "best", "well"], correct: 2, explanation: "Superlative: the + best (good-better-best)." },
+                { level: "A2", points: 2, question: "She is _____ than her sister.", context: "Comparatives", options: ["tall", "taller", "tallest", "more tall"], correct: 1, explanation: "Comparative: taller (tall + er)." },
+                { level: "A2", points: 2, question: "I _____ swim when I was five.", context: "Past Ability", options: ["can", "could", "may", "might"], correct: 1, explanation: "Could untuk ability di masa lalu." },
+                { level: "A2", points: 2, question: "You _____ smoke here. It's prohibited.", context: "Prohibition", options: ["must", "mustn't", "don't have to", "can"], correct: 1, explanation: "Mustn't untuk larangan kuat." },
+                { level: "A2", points: 2, question: "_____ you ever been to Japan?", context: "Present Perfect - Ever", options: ["Did", "Have", "Do", "Are"], correct: 1, explanation: "Have you ever...? untuk pengalaman." },
+                { level: "A2", points: 2, question: "The book _____ by Shakespeare.", context: "Passive Voice", options: ["writes", "wrote", "was written", "is writing"], correct: 2, explanation: "Passive: was/were + V3." },
+                { level: "A2", points: 2, question: "I look forward _____ you soon.", context: "Preposition + Gerund", options: ["see", "to see", "seeing", "to seeing"], correct: 3, explanation: "Look forward to + V-ing." },
+                { level: "A2", points: 2, question: "She asked me where I _____.", context: "Indirect Questions", options: ["live", "lived", "am living", "living"], correct: 1, explanation: "Indirect question: tense mundur." },
+                { level: "A2", points: 2, question: "If it rains, I _____ at home.", context: "First Conditional", options: ["stay", "will stay", "would stay", "stayed"], correct: 1, explanation: "If + Present, will + verb." },
+                { level: "A2", points: 2, question: "There isn't _____ milk in the fridge.", context: "Quantifiers", options: ["some", "any", "a", "many"], correct: 1, explanation: "Any untuk negatif dengan uncountable." },
+                { level: "A2", points: 2, question: "He _____ his homework yet.", context: "Present Perfect with Yet", options: ["didn't finish", "hasn't finished", "doesn't finish", "isn't finishing"], correct: 1, explanation: "Yet dengan Present Perfect negatif." }
+            ],
+            B1: [
+                { level: "B1", points: 3, question: "By the time I arrived, they _____.", context: "Past Perfect", options: ["left", "have left", "had left", "were leaving"], correct: 2, explanation: "Past Perfect untuk aksi sebelum aksi lain di masa lalu." },
+                { level: "B1", points: 3, question: "I wish I _____ more time.", context: "Wish + Past", options: ["have", "had", "have had", "would have"], correct: 1, explanation: "Wish + Past Simple untuk keinginan sekarang." },
+                { level: "B1", points: 3, question: "If I were rich, I _____ a yacht.", context: "Second Conditional", options: ["will buy", "would buy", "buy", "bought"], correct: 1, explanation: "If + Past, would + verb (unreal)." },
+                { level: "B1", points: 3, question: "The meeting _____ by the manager tomorrow.", context: "Future Passive", options: ["will hold", "will be held", "is holding", "holds"], correct: 1, explanation: "Future Passive: will be + V3." },
+                { level: "B1", points: 3, question: "She suggested _____ early.", context: "Gerund after Suggest", options: ["to leave", "leaving", "leave", "left"], correct: 1, explanation: "Suggest + V-ing." },
+                { level: "B1", points: 3, question: "Not only _____ English, but also French.", context: "Inversion", options: ["she speaks", "does she speak", "she does speak", "speaks she"], correct: 1, explanation: "Not only + auxiliary + subject." },
+                { level: "B1", points: 3, question: "I can't find my keys. I _____ them at home.", context: "Modal Perfect", options: ["must leave", "must have left", "had to leave", "should leave"], correct: 1, explanation: "Must have + V3 untuk kesimpulan masa lalu." },
+                { level: "B1", points: 3, question: "The house _____ built in 1990.", context: "Passive Past", options: ["is", "was", "were", "has been"], correct: 1, explanation: "Was/were + V3 untuk waktu spesifik masa lalu." },
+                { level: "B1", points: 3, question: "He told me he _____ the next day.", context: "Reported Speech", options: ["will come", "would come", "comes", "came"], correct: 1, explanation: "Will menjadi would di reported speech." },
+                { level: "B1", points: 3, question: "_____ the rain, we went for a walk.", context: "Despite + Noun", options: ["Despite", "Although", "Because", "Since"], correct: 0, explanation: "Despite + noun/gerund (tanpa subject+verb)." },
+                { level: "B1", points: 3, question: "You _____ have called me. I was worried.", context: "Should have", options: ["should", "must", "can", "may"], correct: 0, explanation: "Should have + V3 untuk kritik masa lalu." },
+                { level: "B1", points: 3, question: "This is the first time I _____ sushi.", context: "Present Perfect", options: ["eat", "ate", "have eaten", "had eaten"], correct: 2, explanation: "This is the first time + Present Perfect." },
+                { level: "B1", points: 3, question: "Hardly _____ when the phone rang.", context: "Hardly...when", options: ["I had arrived", "had I arrived", "I arrived", "did I arrive"], correct: 1, explanation: "Hardly + auxiliary + subject." },
+                { level: "B1", points: 3, question: "I'd rather you _____ so loud.", context: "Would rather + Past", options: ["don't speak", "didn't speak", "not speak", "haven't spoken"], correct: 1, explanation: "Would rather + subject + Past Simple." },
+                { level: "B1", points: 3, question: "It's time we _____.", context: "It's time + Past", options: ["leave", "left", "have left", "leaving"], correct: 1, explanation: "It's time + subject + Past Simple." }
+            ],
+            B2: [
+                { level: "B2", points: 4, question: "Had I known, I _____ have come.", context: "Third Conditional Inversion", options: ["will", "would", "had", "have"], correct: 1, explanation: "Had I known = If I had known." },
+                { level: "B2", points: 4, question: "The project _____ by the end of next month.", context: "Future Perfect Passive", options: ["will complete", "will have completed", "will be completed", "will have been completed"], correct: 3, explanation: "Will have been + V3." },
+                { level: "B2", points: 4, question: "She _____ have stolen the money. She's honest.", context: "Can't have", options: ["mustn't", "can't", "shouldn't", "may not"], correct: 1, explanation: "Can't have untuk kesimpulan negatif masa lalu." },
+                { level: "B2", points: 4, question: "Were I you, I _____ accept the offer.", context: "Subjunctive Inversion", options: ["will", "would", "shall", "should"], correct: 1, explanation: "Were I you = If I were you." },
+                { level: "B2", points: 4, question: "No sooner _____ than it started raining.", context: "No sooner...than", options: ["we had left", "had we left", "did we leave", "we left"], correct: 1, explanation: "No sooner + auxiliary + subject." },
+                { level: "B2", points: 4, question: "I demand that he _____ immediately.", context: "Subjunctive", options: ["leave", "leaves", "left", "will leave"], correct: 0, explanation: "Demand that + base form (subjunctive)." },
+                { level: "B2", points: 4, question: "The issue _____ at the meeting yesterday.", context: "Phrasal Verb Passive", options: ["was brought up", "brought up", "was brought", "brought"], correct: 0, explanation: "Bring up = mention; was brought up." },
+                { level: "B2", points: 4, question: "Little _____ how serious the situation was.", context: "Little + Inversion", options: ["she knew", "did she know", "she did know", "knew she"], correct: 1, explanation: "Little di awal kalimat = inversion." },
+                { level: "B2", points: 4, question: "If you _____ me earlier, I would have helped.", context: "Mixed Conditional", options: ["told", "had told", "have told", "would tell"], correct: 1, explanation: "If + Past Perfect, would have + V3." },
+                { level: "B2", points: 4, question: "The new policy is _____ to criticism.", context: "Be open to", options: ["open", "opened", "opening", "opens"], correct: 0, explanation: "Be open to + noun (idiom)." },
+                { level: "B2", points: 4, question: "Not until yesterday _____ the truth.", context: "Not until + Inversion", options: ["I knew", "did I know", "I did know", "knew I"], correct: 1, explanation: "Not until di awal = inversion." },
+                { level: "B2", points: 4, question: "He denied _____ the document.", context: "Deny + Gerund", options: ["to steal", "stealing", "steal", "stolen"], correct: 1, explanation: "Deny + V-ing." },
+                { level: "B2", points: 4, question: "Seldom _____ such a beautiful sunset.", context: "Seldom + Inversion", options: ["I have seen", "have I seen", "I saw", "did I see"], correct: 1, explanation: "Seldom di awal = inversion dengan present perfect." },
+                { level: "B2", points: 4, question: "The report is believed _____ next week.", context: "Passive Infinitive", options: ["to publish", "to be published", "to have published", "to have been published"], correct: 1, explanation: "Is believed to be published." },
+                { level: "B2", points: 4, question: "Only after checking three times _____ the mistake.", context: "Only + Inversion", options: ["I found", "did I find", "I did find", "found I"], correct: 1, explanation: "Only + adverbial di awal = inversion." }
+            ],
+            C1: [
+                { level: "C1", points: 5, question: "But for your help, we _____ in trouble.", context: "But for", options: ["will be", "would be", "would have been", "had been"], correct: 2, explanation: "But for = If it had not been for (Third Conditional)." },
+                { level: "C1", points: 5, question: "Under no circumstances _____ the rules.", context: "Under no circumstances", options: ["you must break", "must you break", "you break", "break you"], correct: 1, explanation: "Under no circumstances = inversion." },
+                { level: "C1", points: 5, question: "It's high time the government _____ action.", context: "It's high time", options: ["take", "took", "taken", "taking"], correct: 1, explanation: "It's high time + Past Simple." },
+                { level: "C1", points: 5, question: "Should you need assistance, please _____ us.", context: "Should for If", options: ["call", "to call", "calling", "called"], correct: 0, explanation: "Should you need = If you should need." },
+                { level: "C1", points: 5, question: "The more you practice, _____ you'll become.", context: "The + Comparative", options: ["the more fluent", "more fluent", "the most fluent", "fluenter"], correct: 0, explanation: "The + comparative, the + comparative." },
+                { level: "C1", points: 5, question: "Rarely _____ such dedication in young athletes.", context: "Rarely + Inversion", options: ["we see", "do we see", "we saw", "did we see"], correct: 1, explanation: "Rarely = inversion dengan do/does." },
+                { level: "C1", points: 5, question: "I would sooner _____ than apologize to him.", context: "Would sooner + Base", options: ["resign", "resigned", "to resign", "resigning"], correct: 0, explanation: "Would sooner + bare infinitive." },
+                { level: "C1", points: 5, question: "Were the evidence to emerge, he _____ guilty.", context: "Were to", options: ["will be found", "would be found", "would have been found", "is found"], correct: 1, explanation: "Were to + infinitive untuk unreal future." },
+                { level: "C1", points: 5, question: "Scarcely _____ the house when it collapsed.", context: "Scarcely...when", options: ["they had left", "had they left", "did they leave", "they left"], correct: 1, explanation: "Scarcely + auxiliary + subject." },
+                { level: "C1", points: 5, question: "It is imperative that she _____ informed immediately.", context: "Imperative + Subjunctive", options: ["is", "be", "was", "were"], correct: 1, explanation: "It is imperative that + base form." },
+                { level: "C1", points: 5, question: "Never before _____ such a challenging problem.", context: "Never before + Inversion", options: ["I have faced", "have I faced", "I faced", "did I face"], correct: 1, explanation: "Never before + present perfect + inversion." },
+                { level: "C1", points: 5, question: "The contract is subject _____ approval.", context: "Subject to", options: ["to", "for", "on", "with"], correct: 0, explanation: "Subject to (tergantung pada)." },
+                { level: "C1", points: 5, question: "On no account _____ touch the equipment.", context: "On no account", options: ["you must", "must you", "you should", "should you"], correct: 1, explanation: "On no account = inversion." },
+                { level: "C1", points: 5, question: "Had we invested earlier, we _____ rich now.", context: "Mixed Conditional", options: ["would be", "would have been", "will be", "were"], correct: 0, explanation: "If we had invested..., we would be... (mixed)." },
+                { level: "C1", points: 5, question: "Much as I admire him, I _____ trust him.", context: "Much as", options: ["can't", "can", "could", "couldn't"], correct: 0, explanation: "Much as = Although (concessive)." }
+            ],
+            C2: [
+                { level: "C2", points: 6, question: "Were it not for the rain, the match _____ on.", context: "Were it not for", options: ["will go", "would go", "would have gone", "goes"], correct: 1, explanation: "Were it not for = If it were not for." },
+                { level: "C2", points: 6, question: "At no time _____ aware of the risks involved.", context: "At no time + Perfect", options: ["I was", "was I", "I have been", "have I been"], correct: 3, explanation: "At no time + present perfect + inversion." },
+                { level: "C2", points: 6, question: "Such was the confusion that nobody _____ anything.", context: "Such + Inversion", options: ["knew", "did know", "knows", "had known"], correct: 0, explanation: "Such + be + noun + that." },
+                { level: "C2", points: 6, question: "Had I but known, I _____ differently.", context: "Archaic", options: ["will act", "would act", "would have acted", "had acted"], correct: 2, explanation: "Had I but known = If I had only known." },
+                { level: "C2", points: 6, question: "Not for one moment _____ giving up.", context: "Not for one moment", options: ["I considered", "did I consider", "I did consider", "considered I"], correct: 1, explanation: "Not for one moment = inversion." },
+                { level: "C2", points: 6, question: "Be that as it may, we _____ continue.", context: "Subjunctive Idiom", options: ["must", "must to", "musting", "musted"], correct: 0, explanation: "Be that as it may = meskipun begitu." },
+                { level: "C2", points: 6, question: "So intricate _____ that it took years to solve.", context: "So + Adjective + Inversion", options: ["the puzzle was", "was the puzzle", "puzzle was", "did the puzzle"], correct: 1, explanation: "So + adjective di awal = inversion." },
+                { level: "C2", points: 6, question: "Come what may, we _____ finish on time.", context: "Come what may", options: ["will", "would", "shall", "should"], correct: 0, explanation: "Come what may = whatever happens." },
+                { level: "C2", points: 6, question: "In vain _____ to convince them otherwise.", context: "In vain", options: ["I tried", "did I try", "have I tried", "tried I"], correct: 1, explanation: "In vain = inversion." },
+                { level: "C2", points: 6, question: "To such lengths _____ that he endangered his health.", context: "To such lengths", options: ["he went", "did he go", "he had gone", "had he gone"], correct: 1, explanation: "To such lengths = inversion." }
+            ]
+        };
+
+        // --- STATE MANAGEMENT ---
+        let currentLevel = null;
+        let currentQuestions = [];
+        let currentQuestion = 0;
+        let answers = [];
+        let flagged = [];
+        let score = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let userProgress = {};
+
+        // --- NAVIGATION ---
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('placement_progress');
+            if (saved) {
+                userProgress = JSON.parse(saved);
+                updateLevelProgress();
+            }
+        }
+
+        function updateLevelProgress() {
+            const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+            let totalCompleted = 0;
+            let totalQuestions = 0;
+
+            levels.forEach(level => {
+                const levelQuestions = questionBank[level].length;
+                totalQuestions += levelQuestions;
+                
+                const completed = userProgress[level] ? userProgress[level].filter(a => a !== null).length : 0;
+                totalCompleted += completed;
+                
+                const percent = Math.round((completed / levelQuestions) * 100);
+                const el = document.getElementById(`progress-${level.toLowerCase()}`);
+                if (el) el.innerText = `${percent}%`;
+            });
+
+            const totalPercent = Math.round((totalCompleted / totalQuestions) * 100);
+            document.getElementById('total-progress').innerText = `${totalPercent}%`;
+            document.getElementById('completed-soal').innerText = totalCompleted;
+        }
+
+        function saveLevelProgress() {
+            userProgress[currentLevel] = answers;
+            localStorage.setItem('placement_progress', JSON.stringify(userProgress));
+            updateLevelProgress();
+        }
+
+        // --- LEVEL START ---
+        function startLevel(level) {
+            currentLevel = level;
+            currentQuestions = [...questionBank[level]];
+            currentQuestion = 0;
+            answers = new Array(currentQuestions.length).fill(null);
+            flagged = new Array(currentQuestions.length).fill(false);
+            score = 0;
+            correctCount = 0;
+            wrongCount = 0;
+
+            // Load saved progress if exists
+            if (userProgress[level]) {
+                answers = [...userProgress[level]];
+                // Recalculate score based on saved answers
+                answers.forEach((ans, idx) => {
+                    if (ans !== null) {
+                        if (ans === currentQuestions[idx].correct) {
+                            score += currentQuestions[idx].points;
+                            correctCount++;
+                        } else {
+                            wrongCount++;
+                        }
+                    }
+                });
+                // Find first unanswered question
+                const firstUnanswered = answers.findIndex(a => a === null);
+                if (firstUnanswered !== -1) {
+                    currentQuestion = firstUnanswered;
+                } else {
+                    currentQuestion = 0; // All answered, start from beginning for review
+                }
+            }
+
+            document.getElementById('currentLevelBadge').innerText = level;
+            document.getElementById('totalQ').innerText = currentQuestions.length;
+            
+            showSection('quiz');
+            loadQuestion();
+        }
+
+        function startFullTest() {
+            // Combine all levels
+            currentLevel = 'FULL';
+            currentQuestions = [];
+            ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
+                currentQuestions.push(...questionBank[level]);
+            });
+            currentQuestion = 0;
+            answers = new Array(currentQuestions.length).fill(null);
+            flagged = new Array(currentQuestions.length).fill(false);
+            score = 0;
+            correctCount = 0;
+            wrongCount = 0;
+
+            document.getElementById('currentLevelBadge').innerText = 'ALL';
+            document.getElementById('totalQ').innerText = currentQuestions.length;
+            
+            showSection('quiz');
+            loadQuestion();
+        }
+
+        // --- QUIZ LOGIC ---
+        function loadQuestion() {
+            const q = currentQuestions[currentQuestion];
+            
+            document.getElementById('questionNumber').innerText = currentQuestion + 1;
+            document.getElementById('currentQ').innerText = currentQuestion + 1;
+            
+            // Update progress circle
+            const circle = document.getElementById('progressCircle');
+            const radius = 20;
+            const circumference = radius * 2 * Math.PI;
+            const progress = ((currentQuestion + 1) / currentQuestions.length) * circumference;
+            circle.style.strokeDashoffset = circumference - progress;
+
+            document.getElementById('questionText').innerText = q.question;
+            document.getElementById('questionContext').innerText = q.context;
+
+            // Options
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                const isAnswered = answers[currentQuestion] !== null;
+                const isSelected = answers[currentQuestion] === idx;
+                const isCorrect = idx === q.correct;
+                
+                let className = 'option-card w-full flex items-center gap-3';
+                if (isAnswered) {
+                    if (isSelected && isCorrect) className += ' selected-correct';
+                    else if (isSelected && !isCorrect) className += ' selected-wrong';
+                    else if (isCorrect) className += ' selected-correct';
+                    className += ' disabled';
+                }
+                
+                btn.className = className;
+                if (!isAnswered) {
+                    btn.onclick = () => selectAnswer(idx);
+                }
+                
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-sm font-bold flex-shrink-0 text-blue-600 border border-blue-200">${String.fromCharCode(65 + idx)}</span>
+                    <span class="text-sm font-medium">${opt}</span>
+                `;
+                
+                container.appendChild(btn);
+            });
+
+            // Explanation
+            const expBox = document.getElementById('explanationBox');
+            if (answers[currentQuestion] !== null) {
+                expBox.classList.remove('hidden');
+                document.getElementById('explanationText').innerText = q.explanation;
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            // Navigation
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').innerText = currentQuestion === currentQuestions.length - 1 ? 'Finish' : 'Next →';
+            
+            // Flag
+            const flagBtn = document.getElementById('flagBtn');
+            flagBtn.style.background = flagged[currentQuestion] ? 'rgba(251, 191, 36, 0.2)' : 'transparent';
+        }
+
+        function selectAnswer(idx) {
+            if (answers[currentQuestion] !== null) return;
+            
+            answers[currentQuestion] = idx;
+            const q = currentQuestions[currentQuestion];
+            const isCorrect = idx === q.correct;
+            
+            if (isCorrect) {
+                score += q.points;
+                correctCount++;
+                createConfetti();
+            } else {
+                wrongCount++;
+            }
+            
+            saveLevelProgress();
+            loadQuestion();
+        }
+
+        function createConfetti() {
+            const colors = ['#3b82f6', '#8b5cf6', '#fbbf24', '#22c55e', '#ec4899', '#06b6d4'];
+            const shapes = ['circle', 'square', 'triangle'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Random position
+                const startX = Math.random() * window.innerWidth;
+                confetti.style.left = startX + 'px';
+                confetti.style.top = '-10px';
+                
+                // Random color
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.background = color;
+                
+                // Random shape
+                const shape = shapes[Math.floor(Math.random() * shapes.length)];
+                if (shape === 'circle') {
+                    confetti.style.borderRadius = '50%';
+                } else if (shape === 'triangle') {
+                    confetti.style.width = '0';
+                    confetti.style.height = '0';
+                    confetti.style.background = 'transparent';
+                    confetti.style.borderLeft = '6px solid transparent';
+                    confetti.style.borderRight = '6px solid transparent';
+                    confetti.style.borderBottom = `10px solid ${color}`;
+                }
+                
+                // Random size
+                const size = Math.random() * 8 + 8;
+                confetti.style.width = size + 'px';
+                confetti.style.height = size + 'px';
+                
+                // Random animation properties
+                const duration = Math.random() * 2 + 2;
+                const delay = Math.random() * 0.3;
+                const rotation = Math.random() * 720;
+                const horizontalMovement = (Math.random() - 0.5) * 200;
+                
+                confetti.style.animation = `confetti-fall ${duration}s ease-out ${delay}s forwards`;
+                confetti.style.setProperty('--rotation', rotation + 'deg');
+                confetti.style.setProperty('--horizontal', horizontalMovement + 'px');
+                
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), (duration + delay) * 1000);
+            }
+            
+            // Add burst effect at click position
+            createBurstEffect();
+        }
+
+        function createBurstEffect() {
+            const burst = document.createElement('div');
+            burst.style.position = 'fixed';
+            burst.style.left = '50%';
+            burst.style.top = '50%';
+            burst.style.transform = 'translate(-50%, -50%)';
+            burst.style.width = '100px';
+            burst.style.height = '100px';
+            burst.style.borderRadius = '50%';
+            burst.style.background = 'radial-gradient(circle, rgba(251,191,36,0.4) 0%, transparent 70%)';
+            burst.style.pointerEvents = 'none';
+            burst.style.zIndex = '9998';
+            burst.className = 'confetti-burst';
+            
+            document.body.appendChild(burst);
+            setTimeout(() => burst.remove(), 600);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion === currentQuestions.length - 1) {
+                showResults();
+            } else {
+                currentQuestion++;
+                loadQuestion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function flagQuestion() {
+            flagged[currentQuestion] = !flagged[currentQuestion];
+            const flagBtn = document.getElementById('flagBtn');
+            flagBtn.style.background = flagged[currentQuestion] ? 'rgba(251, 191, 36, 0.2)' : 'transparent';
+        }
+
+        // --- RESULTS ---
+        function showResults() {
+            showSection('results');
+            
+            const totalPossible = currentQuestions.reduce((sum, q) => sum + q.points, 0);
+            const percentage = (score / totalPossible) * 100;
+            
+            let level = currentLevel;
+            let desc = '';
+            
+            if (currentLevel === 'FULL') {
+                if (percentage < 20) { level = 'A1'; desc = 'Beginner'; }
+                else if (percentage < 35) { level = 'A2'; desc = 'Elementary'; }
+                else if (percentage < 55) { level = 'B1'; desc = 'Intermediate'; }
+                else if (percentage < 75) { level = 'B2'; desc = 'Upper Intermediate'; }
+                else if (percentage < 90) { level = 'C1'; desc = 'Advanced'; }
+                else { level = 'C2'; desc = 'Mastery'; }
+            } else {
+                desc = getLevelDesc(currentLevel);
+            }
+            
+            document.getElementById('resultLevel').innerText = level;
+            document.getElementById('resultDesc').innerText = desc;
+            document.getElementById('resultScore').innerText = score;
+            document.getElementById('correctCount').innerText = correctCount;
+            document.getElementById('wrongCount').innerText = wrongCount;
+            document.getElementById('accuracyPercent').innerText = Math.round((correctCount / currentQuestions.length) * 100) + '%';
+        }
+
+        function getLevelDesc(level) {
+            const descs = {
+                'A1': 'Beginner - Dasar Grammar',
+                'A2': 'Elementary - Grammar Dasar Lancar',
+                'B1': 'Intermediate - Grammar Menengah',
+                'B2': 'Upper Intermediate - Grammar Baik',
+                'C1': 'Advanced - Grammar Mahir',
+                'C2': 'Mastery - Grammar Sempurna'
+            };
+            return descs[level] || '';
+        }
+
+        function backToHome() {
+            showSection('home');
+            updateLevelProgress();
+        }
+
+        // --- CERTIFICATE ---
+        function downloadCertificate() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+            
+            const level = document.getElementById('resultLevel').innerText;
+            const score = document.getElementById('resultScore').innerText;
+            const date = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Background gradient effect
+            doc.setFillColor(240, 249, 255);
+            doc.rect(0, 0, 297, 210, 'F');
+            
+            // Decorative gradient bars
+            doc.setFillColor(59, 130, 246);
+            doc.rect(0, 0, 297, 15, 'F');
+            doc.setFillColor(139, 92, 246);
+            doc.rect(0, 195, 297, 15, 'F');
+            
+            // Gold border
+            doc.setDrawColor(251, 191, 36);
+            doc.setLineWidth(4);
+            doc.rect(20, 20, 257, 170);
+            
+            doc.setDrawColor(252, 211, 77);
+            doc.setLineWidth(2);
+            doc.rect(25, 25, 247, 160);
+            
+            // Title
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(42);
+            doc.setTextColor(59, 130, 246);
+            doc.text('SERTIFIKAT PENGHARGAAN', 148.5, 55, { align: 'center' });
+            
+            doc.setFontSize(18);
+            doc.setTextColor(100, 100, 100);
+            doc.text('PLACEMENT TEST GRAMMAR', 148.5, 70, { align: 'center' });
+            
+            // Content
+            doc.setFontSize(16);
+            doc.setTextColor(80, 80, 80);
+            doc.text('Telah menyelesaikan placement test dengan level:', 148.5, 95, { align: 'center' });
+            
+            // Level with gold color
+            doc.setFontSize(70);
+            doc.setTextColor(217, 119, 6);
+            doc.text(level, 148.5, 130, { align: 'center' });
+            
+            doc.setFontSize(24);
+            doc.setTextColor(50, 50, 50);
+            doc.text(`Score: ${score}`, 148.5, 155, { align: 'center' });
+            doc.text(`Tanggal: ${date}`, 148.5, 170, { align: 'center' });
+            
+            // Footer
+            doc.setFontSize(12);
+            doc.setTextColor(120, 120, 120);
+            doc.text('Salvo Group Language Assessment', 148.5, 190, { align: 'center' });
+            
+            doc.save(`Sertifikat_Grammar_${level}_${date.replace(/\s/g, '_')}.pdf`);
+        }
+
+    </script>
+</body>
+</html>
